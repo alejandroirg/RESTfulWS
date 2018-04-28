@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import me.jmll.utm.model.Notification;
+import me.jmll.utm.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,42 +17,47 @@ import org.springframework.util.StopWatch;
 public class NotificationServiceImpl implements NotificationService {
 	@Autowired
 	private MailSender mailSender;
+	@Autowired
+	NotificationRepository notificationRepository;
 	
 	private static final Logger logger = LogManager.getLogger();
-	
-	/**
-	 * Define notify como método asíncrono
-	 * */
+
+	@Override
+	public List<Notification> getNotifications() {
+		return notificationRepository.getNotifications();
+	}
+
 	@Async
 	@Override
-	public void notify(String subject, String message, List<String> toAddress, List<String> ccAddress) {
+	public Notification notify(String subject, String message, List<String> toAddress, List<String> ccAddress) {
+		Notification notification = new Notification();
 		StopWatch stopwatch = new StopWatch();
 		stopwatch.start();
 		String threadName = Thread.currentThread().getName();
-		logger.info("{} started subject={}, message={}, toAddress={}, ccAddress={}", threadName,
-				subject, message, toAddress, ccAddress);
-		/**
-		 * Crea un objeto de tipo SimpleMailMessage
-		 * configurando To con setTo y el valor de (String.join(",", toAddress)
-		 * CC con el método setCc y el valor de String.join(",", ccAddress)
-		 * Subject con el método setSubject y el valor de subject
-		 * y el texto con setText y el valor de message
-		 * Finalmente envía el correo con el método send de mailSender
-		 * */
+		logger.info("{} started subject={}, message={}, toAddress={}, ccAddress={}", threadName, subject, message, toAddress, ccAddress);
+
+		notification.setSubject(subject);
+		notification.setMessage(message);
+		notification.setToAddress(toAddress);
+		notification.setCcAddress(ccAddress);
+
 		try {
 			SimpleMailMessage emailMessage = new SimpleMailMessage();
+			emailMessage.setFrom("redcoded@outlook.com");
 			emailMessage.setTo(String.join(",", toAddress));
 			if (ccAddress.size() > 0 && !ccAddress.get(0).isEmpty())
 				emailMessage.setCc(String.join(",", ccAddress));
 			emailMessage.setSubject(subject);
 			emailMessage.setText(message);
 			mailSender.send(emailMessage);
-		} catch (Exception ex){
+			notification.setStatus("SENT");
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
+			notification.setStatus("ERROR");
 		}
 		stopwatch.stop();
-		logger.info("{} took {} secs", threadName,
-				stopwatch.getTotalTimeSeconds());
+		logger.info("{} took {} secs", threadName, stopwatch.getTotalTimeSeconds());
+		notificationRepository.addNotification(notification);
+		return notification;
 	}
-
 }

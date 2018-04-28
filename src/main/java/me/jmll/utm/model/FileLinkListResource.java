@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class UserResource extends Resource {
+public class FileLinkListResource extends Resource {
 	private List<Link> links = new ArrayList<>();
-	private User user;
+	private List<File> files = new ArrayList<>();
 	
 	@XmlElement(name="link")
 	public List<Link> getLinks() {
@@ -19,17 +19,17 @@ public class UserResource extends Resource {
 	public void setLinks(List<Link> links) {
 		this.links = links;
 	}
-
+	
 	public void addLink(Link link) {
 		this.links.add(link);
 	}
 	
-	@XmlElement(name="data")
-	public User getUser() {
-		return user;
+	@XmlElement(name="file")
+	public List<File> getFiles() {
+		return files;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setFiles(List<File> files) {
+		this.files = files;
 	}
 }

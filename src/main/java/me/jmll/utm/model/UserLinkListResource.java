@@ -7,11 +7,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class UserLinkListResource extends Resource{
+public class UserLinkListResource extends Resource {
 	private List<Link> links = new ArrayList<>();
 	private List<Link> userLinks = new ArrayList<>();
 	
-	@XmlElement(name = "link")
+	@XmlElement(name="link")
 	public List<Link> getLinks() {
 		return links;
 	}
@@ -33,7 +33,7 @@ public class UserLinkListResource extends Resource{
 		this.userLinks = userLinks;
 	}
 	
-	public void addUserLink(Link link){
+	public void addUserLink(Link link) {
 		this.userLinks.add(link);
 	}
 }

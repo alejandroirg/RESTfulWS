@@ -77,4 +77,10 @@ public class FileServiceImpl implements FileService {
 		return false;
 	}
 
+	@Override
+	public String delete(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

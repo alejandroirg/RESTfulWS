@@ -1,4 +1,5 @@
 package me.jmll.utm.repository;
+
 import java.util.List;
 
 import me.jmll.utm.model.User;
@@ -11,5 +12,3 @@ public interface UserRepository {
 	public void deleteUser(String username);
 	public User updateUser(User user);
 }
-
-
