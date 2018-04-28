@@ -1,8 +1,7 @@
-# RESTfulWS
-a) Instalación
+## CS13304 - Computación Avanzada en Java
+- Por: Jose Manuel Lopez Lujan, MIT
 
-b) Uso
-
-c) Créditos
-
-d) Licencia 
+### CS13304T12 - RESTful Web Services
+ 
+#### Tema 12 - Actividad 1
+ 
